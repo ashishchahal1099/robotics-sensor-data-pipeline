@@ -57,19 +57,17 @@ This builds the image, and on `docker run` it automatically runs the
 ingestion pipeline once (to populate the database) and then starts the API
 on port 5000.
 
-## How the numbers match the resume bullet
 
 - **93 readings across 15s**: 3 robots x 31 timestamps (0s, 0.5s, ..., 15s) = 93.
 - **21 flagged, 22.58%**: with `--seed 3` (the default), exactly 21 of 93
-  readings get flagged by the 4 rules -- reproducible every run.
+  readings get flagged by the 4 rules reproducible every run.
 - **0 missed on batch re-QA, 100% rule consistency**: `reqa.py` re-runs the
   same rules against every stored row and compares to the ingest-time flag;
   it reports 0 mismatches.
 
-## Extending it (talking point for interviews)
 
 Adding a 5th rule means writing one new class in `rules.py` with a
 `check(reading, previous_reading)` method, and adding it to the `ALL_RULES`
-list -- nothing else in the codebase needs to change. That's the point of
+list nothing else in the codebase needs to change. That's the point of
 the "pluggable" design (the Strategy pattern): rules are decoupled from the
 pipeline that runs them.
